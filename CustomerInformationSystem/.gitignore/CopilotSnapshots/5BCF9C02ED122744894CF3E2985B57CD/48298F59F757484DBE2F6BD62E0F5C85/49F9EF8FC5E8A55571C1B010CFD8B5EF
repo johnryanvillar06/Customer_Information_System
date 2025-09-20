@@ -1,0 +1,100 @@
+﻿namespace CustomerInformationSystem
+{
+    partial class Form1
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.dataGridViewCustomers = new System.Windows.Forms.DataGridView();
+            this.btnAddCustomer = new System.Windows.Forms.Button();
+            this.btnEditCustomer = new System.Windows.Forms.Button();
+            this.btnDeleteCustomer = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCustomers)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // dataGridViewCustomers
+            // 
+            this.dataGridViewCustomers.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
+                | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewCustomers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCustomers.Location = new System.Drawing.Point(12, 12);
+            this.dataGridViewCustomers.Name = "dataGridViewCustomers";
+            this.dataGridViewCustomers.Size = new System.Drawing.Size(776, 350);
+            this.dataGridViewCustomers.TabIndex = 0;
+            // 
+            // btnAddCustomer
+            // 
+            this.btnAddCustomer.Location = new System.Drawing.Point(12, 380);
+            this.btnAddCustomer.Name = "btnAddCustomer";
+            this.btnAddCustomer.Size = new System.Drawing.Size(120, 40);
+            this.btnAddCustomer.TabIndex = 1;
+            this.btnAddCustomer.Text = "Add Customer";
+            this.btnAddCustomer.UseVisualStyleBackColor = true;
+            // 
+            // btnEditCustomer
+            // 
+            this.btnEditCustomer.Location = new System.Drawing.Point(138, 380);
+            this.btnEditCustomer.Name = "btnEditCustomer";
+            this.btnEditCustomer.Size = new System.Drawing.Size(120, 40);
+            this.btnEditCustomer.TabIndex = 2;
+            this.btnEditCustomer.Text = "Edit Customer";
+            this.btnEditCustomer.UseVisualStyleBackColor = true;
+            // 
+            // btnDeleteCustomer
+            // 
+            this.btnDeleteCustomer.Location = new System.Drawing.Point(264, 380);
+            this.btnDeleteCustomer.Name = "btnDeleteCustomer";
+            this.btnDeleteCustomer.Size = new System.Drawing.Size(120, 40);
+            this.btnDeleteCustomer.TabIndex = 3;
+            this.btnDeleteCustomer.Text = "Delete Customer";
+            this.btnDeleteCustomer.UseVisualStyleBackColor = true;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.dataGridViewCustomers);
+            this.Controls.Add(this.btnAddCustomer);
+            this.Controls.Add(this.btnEditCustomer);
+            this.Controls.Add(this.btnDeleteCustomer);
+            this.Name = "Form1";
+            this.Text = "Customer Information System";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCustomers)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.DataGridView dataGridViewCustomers;
+        private System.Windows.Forms.Button btnAddCustomer;
+        private System.Windows.Forms.Button btnEditCustomer;
+        private System.Windows.Forms.Button btnDeleteCustomer;
+    }
+}

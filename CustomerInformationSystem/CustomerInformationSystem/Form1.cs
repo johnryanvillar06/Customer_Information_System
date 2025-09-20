@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+
+namespace CustomerInformationSystem
+{
+    public partial class Form1 : Form
+    {
+        private readonly CustomerRepository _customerRepository;
+
+        public Form1()
+        {
+            InitializeComponent();
+            _customerRepository = new CustomerRepository(Program.ConnectionString);
+            this.Load += Form1_Load;
+            btnAddCustomer.Click += BtnAddCustomer_Click;
+            btnEditCustomer.Click += BtnEditCustomer_Click;
+            btnDeleteCustomer.Click += BtnDeleteCustomer_Click;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadCustomers();
+        }
+
+        private void LoadCustomers()
+        {
+            var customers = _customerRepository.GetAllCustomers();
+            dataGridViewCustomers.DataSource = customers;
+            dataGridViewCustomers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+            dataGridViewCustomers.ScrollBars = ScrollBars.Both;
+        }
+
+        private void BtnAddCustomer_Click(object sender, EventArgs e)
+        {
+            using (var editForm = new CustomerEditForm())
+            {
+                if (editForm.ShowDialog() == DialogResult.OK)
+                {
+                    _customerRepository.AddCustomer(editForm.Customer);
+                    LoadCustomers();
+                }
+            }
+        }
+
+        private void BtnEditCustomer_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewCustomers.CurrentRow?.DataBoundItem is Customer selectedCustomer)
+            {
+                using (var editForm = new CustomerEditForm(selectedCustomer))
+                {
+                    if (editForm.ShowDialog() == DialogResult.OK)
+                    {
+                        _customerRepository.UpdateCustomer(editForm.Customer);
+                        LoadCustomers();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a customer to edit.", "Edit Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void BtnDeleteCustomer_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewCustomers.CurrentRow?.DataBoundItem is Customer selectedCustomer)
+            {
+                var confirm = MessageBox.Show($"Are you sure you want to delete {selectedCustomer.FirstName} {selectedCustomer.LastName}?", "Delete Customer", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.Yes)
+                {
+                    _customerRepository.DeleteCustomer(selectedCustomer.CustomerId);
+                    LoadCustomers();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a customer to delete.", "Delete Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+    }
+}

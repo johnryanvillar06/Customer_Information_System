@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+
+namespace CustomerInformationSystem
+{
+    public class CustomerRepository
+    {
+        private readonly string _connectionString;
+
+        public CustomerRepository(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public List<Customer> GetAllCustomers()
+        {
+            var customers = new List<Customer>();
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Customers", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        customers.Add(new Customer
+                        {
+                            CustomerId = (int)reader["CustomerId"],
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            Email = reader["Email"].ToString(),
+                            Phone = reader["Phone"].ToString(),
+                            Address = reader["Address"].ToString(),
+                            CreatedDate = (DateTime)reader["CreatedDate"]
+                        });
+                    }
+                }
+            }
+            return customers;
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "INSERT INTO Customers (FirstName, LastName, Email, Phone, Address) VALUES (@FirstName, @LastName, @Email, @Phone, @Address)", conn);
+                cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                cmd.Parameters.AddWithValue("@Email", customer.Email);
+                cmd.Parameters.AddWithValue("@Phone", customer.Phone ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Address", customer.Address ?? (object)DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // Add UpdateCustomer and DeleteCustomer methods as needed
+    }
+}

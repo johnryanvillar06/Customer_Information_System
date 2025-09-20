@@ -1,0 +1,89 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace CustomerInformationSystem
+{
+    public class CustomerRepository
+    {
+        private readonly string _connectionString;
+
+        public CustomerRepository(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public List<Customer> GetAllCustomers()
+        {
+            var customers = new List<Customer>();
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand("SELECT * FROM Customers", conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        customers.Add(new Customer
+                        {
+                            CustomerId = (int)reader["CustomerId"],
+                            FirstName = reader["FirstName"].ToString(),
+                            LastName = reader["LastName"].ToString(),
+                            Email = reader["Email"].ToString(),
+                            Phone = reader["Phone"].ToString(),
+                            Address = reader["Address"].ToString(),
+                            CreatedDate = (DateTime)reader["CreatedDate"]
+                        });
+                    }
+                }
+            }
+            return customers;
+        }
+
+        public void AddCustomer(Customer customer)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "INSERT INTO Customers (FirstName, LastName, Email, Phone, Address) VALUES (@FirstName, @LastName, @Email, @Phone, @Address)", conn);
+                cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                cmd.Parameters.AddWithValue("@Email", customer.Email);
+                cmd.Parameters.AddWithValue("@Phone", customer.Phone ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@Address", customer.Address ?? (object)DBNull.Value);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void AddUser(string username, string password, string fullName, string email)
+        {
+            string passwordHash = ComputeSha256Hash(password);
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                var cmd = new SqlCommand(
+                    "INSERT INTO Users (Username, PasswordHash, FullName, Email) VALUES (@Username, @PasswordHash, @FullName, @Email)", conn);
+                cmd.Parameters.AddWithValue("@Username", username);
+                cmd.Parameters.AddWithValue("@PasswordHash", passwordHash);
+                cmd.Parameters.AddWithValue("@FullName", fullName);
+                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static string ComputeSha256Hash(string rawData)
+        {
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+                StringBuilder builder = new StringBuilder();
+                foreach (var b in bytes)
+                    builder.Append(b.ToString("x2"));
+                return builder.ToString();
+            }
+        }
+    }
+}

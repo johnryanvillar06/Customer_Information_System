@@ -1,0 +1,25 @@
+﻿using System;
+using System.Windows.Forms;
+
+namespace CustomerInformationSystem
+{
+    internal static class Program
+    {
+        public static string ConnectionString = "Data Source=DESKTOP-2BCT1O2;Initial Catalog=CustomerInformationSystem;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Application Name=\"SQL Server Management Studio\"";
+        /// <summary>
+        ///  The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            ApplicationConfiguration.Initialize();
+            using (var loginForm = new LoginForm())
+            {
+                if (loginForm.ShowDialog() == DialogResult.OK && loginForm.IsAuthenticated)
+                {
+                    Application.Run(new Form1());
+                }
+            }
+        }
+    }
+}
